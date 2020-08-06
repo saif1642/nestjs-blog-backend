@@ -16,3 +16,7 @@ export class RegistrationDTO extends LoginDTO{
     @MaxLength(20)
     username:string;
 }
+
+export interface AuthPayload{
+    username:string;
+} 

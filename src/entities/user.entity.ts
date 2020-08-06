@@ -1,15 +1,15 @@
 import * as bcrypt from 'bcryptjs';
 import { AbstractEntity } from "./abstract.entity";
-import { Column, BeforeInsert } from "typeorm";
+import { Column, BeforeInsert, Entity } from "typeorm";
 import { Exclude, classToPlain } from "class-transformer";
 import { IsEmail } from "class-validator";
-
+@Entity('users')
 export class UserEntity extends AbstractEntity{
     @Column()
     @IsEmail()
     email:string;
     
-    @Column()
+    @Column({ unique : true})
     username:string;
 
     @Column({ default:'' })
@@ -29,5 +29,10 @@ export class UserEntity extends AbstractEntity{
 
     toJSON(){
         return classToPlain(this);
+    }
+
+    async comparePassword(attempt: string){
+        return await bcrypt.compare(attempt,this.password);
+
     }
 }
